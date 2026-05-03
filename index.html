@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kalkulator iPhone Style</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="phone-frame" aria-label="Kalkulator">
+        <div class="toolbar compact-toolbar">
+          <button class="tool-button" id="historyToggle" type="button" aria-label="Riwayat">
+            <span class="clock-icon" aria-hidden="true"></span>
+          </button>
+          <button class="tool-button" id="scienceToggle" type="button" aria-label="Mode scientific">
+            <span class="calc-icon" aria-hidden="true">
+              <i></i><i></i><i></i><i></i><i></i><i></i>
+            </span>
+          </button>
+        </div>
+
+        <section class="history-panel" id="historyPanel" aria-live="polite">
+          <div class="history-head">
+            <p>Riwayat</p>
+            <button class="history-clear" id="clearHistory" type="button">Hapus</button>
+          </div>
+          <div class="history-list" id="historyList">
+            <p class="history-empty">Belum ada perhitungan.</p>
+          </div>
+        </section>
+
+        <section class="display-panel">
+          <p class="expression-line" id="expression"></p>
+          <div class="display" id="display">0</div>
+        </section>
+
+        <section class="scientific-panel" id="scientificPanel">
+          <button class="key key-scientific" data-action="toggle-second">2nd</button>
+          <button class="key key-scientific" data-action="open-paren">(</button>
+          <button class="key key-scientific" data-action="close-paren">)</button>
+          <button class="key key-scientific" data-action="memory-clear">mc</button>
+          <button class="key key-scientific" data-action="memory-add">m+</button>
+          <button class="key key-scientific" data-action="memory-subtract">m-</button>
+
+          <button class="key key-scientific" data-action="memory-recall">mr</button>
+          <button class="key key-scientific" data-action="square">x²</button>
+          <button class="key key-scientific" data-action="cube">x³</button>
+          <button class="key key-scientific" data-action="power">xʸ</button>
+          <button class="key key-scientific" data-action="exp">eˣ</button>
+          <button class="key key-scientific" data-action="exp10">10ˣ</button>
+
+          <button class="key key-scientific" data-action="reciprocal">1/x</button>
+          <button class="key key-scientific" data-action="sqrt">²√x</button>
+          <button class="key key-scientific" data-action="cbrt">³√x</button>
+          <button class="key key-scientific" data-action="root">ʸ√x</button>
+          <button class="key key-scientific" data-action="ln">ln</button>
+          <button class="key key-scientific" data-action="log10">log₁₀</button>
+
+          <button class="key key-scientific" data-action="factorial">x!</button>
+          <button class="key key-scientific" data-action="sin" data-alt-action="asin" data-alt-label="sin⁻¹">sin</button>
+          <button class="key key-scientific" data-action="cos" data-alt-action="acos" data-alt-label="cos⁻¹">cos</button>
+          <button class="key key-scientific" data-action="tan" data-alt-action="atan" data-alt-label="tan⁻¹">tan</button>
+          <button class="key key-scientific" data-action="constant-e">e</button>
+          <button class="key key-scientific" data-action="ee">EE</button>
+
+          <button class="key key-scientific" data-action="rand">Rand</button>
+          <button class="key key-scientific" data-action="sinh" data-alt-action="asinh" data-alt-label="sinh⁻¹">sinh</button>
+          <button class="key key-scientific" data-action="cosh" data-alt-action="acosh" data-alt-label="cosh⁻¹">cosh</button>
+          <button class="key key-scientific" data-action="tanh" data-alt-action="atanh" data-alt-label="tanh⁻¹">tanh</button>
+          <button class="key key-scientific" data-action="constant-pi">π</button>
+          <button class="key key-scientific" data-action="toggle-angle">Rad</button>
+        </section>
+
+        <section class="keypad">
+          <button class="key key-muted" data-action="backspace">⌫</button>
+          <button class="key key-muted" data-action="clear">AC</button>
+          <button class="key key-muted" data-action="percent">%</button>
+          <button class="key key-operator" data-action="divide">÷</button>
+
+          <button class="key key-dark" data-number="7">7</button>
+          <button class="key key-dark" data-number="8">8</button>
+          <button class="key key-dark" data-number="9">9</button>
+          <button class="key key-operator" data-action="multiply">×</button>
+
+          <button class="key key-dark" data-number="4">4</button>
+          <button class="key key-dark" data-number="5">5</button>
+          <button class="key key-dark" data-number="6">6</button>
+          <button class="key key-operator" data-action="subtract">−</button>
+
+          <button class="key key-dark" data-number="1">1</button>
+          <button class="key key-dark" data-number="2">2</button>
+          <button class="key key-dark" data-number="3">3</button>
+          <button class="key key-operator" data-action="add">+</button>
+
+          <button class="key key-dark" data-action="toggle-sign">+/-</button>
+          <button class="key key-dark" data-number="0">0</button>
+          <button class="key key-dark" data-action="decimal">,</button>
+          <button class="key key-operator" data-action="equals">=</button>
+        </section>
+      </section>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>

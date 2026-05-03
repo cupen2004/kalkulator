@@ -1,0 +1,460 @@
+:root {
+  --bg: #000000;
+  --history: rgba(24, 24, 27, 0.95);
+  --key-dark: #2c2c2e;
+  --key-dark-pressed: #3a3a3d;
+  --key-muted: #5b5b60;
+  --key-muted-pressed: #76767b;
+  --key-operator: #ff9f0a;
+  --key-operator-pressed: #ffb340;
+  --text: #f5f5f7;
+  --text-dim: #8f8f94;
+  --shadow: 0 26px 70px rgba(0, 0, 0, 0.42);
+  --frame-width: min(calc(100vw - 28px), 390px);
+  --toolbar-size: 50px;
+  --main-key-size: 66px;
+  --main-font-size: 2rem;
+  --science-key-height: 38px;
+  --science-font-size: 0.82rem;
+  --display-size: clamp(3.6rem, 10vw, 5.25rem);
+  --gap: 10px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+  background:
+    radial-gradient(circle at top, rgba(255, 159, 10, 0.08), transparent 26%),
+    linear-gradient(180deg, #080808 0%, #000000 100%);
+  color: var(--text);
+  font-family: "SF Pro Display", "SF Pro Text", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+body {
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: 14px;
+}
+
+button {
+  border: 0;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.app-shell {
+  width: var(--frame-width);
+}
+
+.phone-frame {
+  position: relative;
+  width: 100%;
+  height: min(calc(100dvh - 28px), 812px);
+  display: flex;
+  flex-direction: column;
+  padding: 22px 16px 18px;
+  border-radius: 34px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent 16%),
+    var(--bg);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.tool-button {
+  width: var(--toolbar-size);
+  height: var(--toolbar-size);
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  background: rgba(28, 28, 30, 0.96);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+  transition: transform 160ms ease, background 160ms ease;
+}
+
+.tool-button:hover,
+.tool-button:focus-visible {
+  transform: translateY(-1px);
+  background: rgba(40, 40, 43, 0.96);
+  outline: none;
+}
+
+.clock-icon,
+.calc-icon {
+  position: relative;
+  display: block;
+}
+
+.clock-icon {
+  width: 26px;
+  height: 26px;
+  border: 2.5px solid #f2f2f2;
+  border-radius: 50%;
+}
+
+.clock-icon::before,
+.clock-icon::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 50%;
+  transform-origin: bottom center;
+  background: #f2f2f2;
+  border-radius: 999px;
+}
+
+.clock-icon::before {
+  width: 2.5px;
+  height: 8px;
+  transform: translateX(-50%) rotate(0deg);
+}
+
+.clock-icon::after {
+  width: 2.5px;
+  height: 11px;
+  transform: translateX(-50%) rotate(55deg);
+}
+
+.calc-icon {
+  width: 22px;
+  height: 27px;
+  border: 2.5px solid #f2f2f2;
+  border-radius: 6px;
+}
+
+.calc-icon::before {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  right: 3px;
+  height: 5px;
+  border-radius: 3px;
+  background: #f2f2f2;
+}
+
+.calc-icon i {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  border-radius: 1px;
+  background: #f2f2f2;
+  top: 12px;
+}
+
+.calc-icon i:nth-child(1) { left: 4px; }
+.calc-icon i:nth-child(2) { left: 9px; }
+.calc-icon i:nth-child(3) { left: 14px; }
+.calc-icon i:nth-child(4) { left: 4px; top: 18px; }
+.calc-icon i:nth-child(5) { left: 9px; top: 18px; }
+.calc-icon i:nth-child(6) { left: 14px; top: 18px; }
+
+.history-panel {
+  position: absolute;
+  inset: 86px 16px auto;
+  z-index: 4;
+  padding: 16px;
+  background: var(--history);
+  border-radius: 24px;
+  backdrop-filter: blur(18px);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+  opacity: 0;
+  transform: translateY(-10px);
+  pointer-events: none;
+  transition: opacity 220ms ease, transform 220ms ease;
+}
+
+.history-panel.open {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.history-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+.history-head p,
+.history-item p,
+.history-empty {
+  margin: 0;
+}
+
+.history-head p {
+  font-size: 0.98rem;
+  font-weight: 600;
+}
+
+.history-clear {
+  padding: 0;
+  background: transparent;
+  color: var(--key-operator);
+  font-size: 0.9rem;
+}
+
+.history-list {
+  display: grid;
+  gap: 10px;
+  max-height: 210px;
+  overflow: auto;
+}
+
+.history-item {
+  display: grid;
+  gap: 4px;
+  padding: 12px 14px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.history-empty,
+.history-expression {
+  color: var(--text-dim);
+}
+
+.history-expression {
+  font-size: 0.88rem;
+}
+
+.history-result {
+  font-size: 1.02rem;
+}
+
+.display-panel {
+  flex: 1;
+  display: grid;
+  align-content: end;
+  justify-items: end;
+  gap: 8px;
+  min-height: 0;
+}
+
+.expression-line {
+  min-height: 20px;
+  margin: 0;
+  color: var(--text-dim);
+  font-size: 0.95rem;
+  letter-spacing: -0.02em;
+}
+
+.display {
+  min-height: 78px;
+  font-size: var(--display-size);
+  font-weight: 300;
+  line-height: 0.9;
+  letter-spacing: -0.06em;
+  text-align: right;
+  word-break: break-all;
+}
+
+.scientific-panel,
+.keypad {
+  display: grid;
+  gap: var(--gap);
+}
+
+.scientific-panel {
+  margin-top: 14px;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  opacity: 0;
+  max-height: 0;
+  overflow: hidden;
+  transition: opacity 220ms ease, max-height 220ms ease, margin 220ms ease;
+}
+
+.keypad {
+  margin-top: 14px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.key {
+  width: min(100%, var(--main-key-size));
+  height: var(--main-key-size);
+  justify-self: center;
+  align-self: center;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: var(--main-font-size);
+  letter-spacing: -0.04em;
+  transition: transform 120ms ease, background 120ms ease, color 120ms ease;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.key:hover,
+.key:focus-visible {
+  transform: scale(0.985);
+  outline: none;
+}
+
+.key-dark,
+.key-scientific {
+  background: var(--key-dark);
+}
+
+.key-dark:hover,
+.key-dark:focus-visible,
+.key-scientific:hover,
+.key-scientific:focus-visible {
+  background: var(--key-dark-pressed);
+}
+
+.key-muted {
+  background: var(--key-muted);
+}
+
+.key-muted:hover,
+.key-muted:focus-visible {
+  background: var(--key-muted-pressed);
+}
+
+.key-operator {
+  background: var(--key-operator);
+}
+
+.key-operator:hover,
+.key-operator:focus-visible,
+.key-operator.active {
+  background: var(--key-operator-pressed);
+}
+
+.key-scientific {
+  width: 100%;
+  height: var(--science-key-height);
+  min-height: var(--science-key-height);
+  border-radius: 999px;
+  padding-inline: 4px;
+  font-size: var(--science-font-size);
+}
+
+.key-scientific.active-secondary {
+  box-shadow: inset 0 0 0 2px rgba(255, 159, 10, 0.78);
+  color: #ffd18a;
+}
+
+.key-scientific.active-angle {
+  color: #ffd18a;
+}
+
+.phone-frame.scientific-active {
+  --toolbar-size: 42px;
+  --main-key-size: 52px;
+  --main-font-size: 1.56rem;
+  --science-key-height: 34px;
+  --science-font-size: 0.72rem;
+  --gap: 8px;
+  padding: 18px 14px 14px;
+}
+
+.phone-frame.scientific-active .toolbar {
+  margin-bottom: 8px;
+}
+
+.phone-frame.scientific-active .display-panel {
+  flex: 0 0 auto;
+  min-height: 84px;
+  gap: 4px;
+}
+
+.phone-frame.scientific-active .expression-line {
+  min-height: 16px;
+  font-size: 0.74rem;
+}
+
+.phone-frame.scientific-active .display {
+  min-height: 46px;
+  font-size: clamp(2.4rem, 7vw, 3.25rem);
+}
+
+.phone-frame.scientific-active .scientific-panel {
+  opacity: 1;
+  max-height: 224px;
+  margin-bottom: 8px;
+}
+
+.phone-frame.scientific-active .keypad {
+  margin-top: 8px;
+}
+
+@media (max-height: 780px) {
+  :root {
+    --toolbar-size: 46px;
+    --main-key-size: 60px;
+    --main-font-size: 1.82rem;
+    --display-size: clamp(3.15rem, 9vw, 4.6rem);
+    --gap: 9px;
+  }
+
+  .phone-frame {
+    padding: 18px 14px 14px;
+  }
+
+  .phone-frame.scientific-active {
+    --toolbar-size: 38px;
+    --main-key-size: 46px;
+    --main-font-size: 1.36rem;
+    --science-key-height: 30px;
+    --science-font-size: 0.66rem;
+    --gap: 6px;
+    padding: 14px 12px 12px;
+  }
+
+  .phone-frame.scientific-active .display-panel {
+    min-height: 68px;
+  }
+
+  .phone-frame.scientific-active .display {
+    min-height: 38px;
+    font-size: clamp(2rem, 6vw, 2.75rem);
+  }
+
+  .phone-frame.scientific-active .scientific-panel {
+    max-height: 194px;
+  }
+}
+
+@media (max-width: 380px) {
+  :root {
+    --frame-width: calc(100vw - 16px);
+    --toolbar-size: 44px;
+    --main-key-size: 58px;
+    --main-font-size: 1.72rem;
+    --gap: 8px;
+  }
+
+  body {
+    padding: 8px;
+  }
+
+  .phone-frame {
+    height: calc(100dvh - 16px);
+    padding-inline: 12px;
+  }
+
+  .phone-frame.scientific-active {
+    --toolbar-size: 36px;
+    --main-key-size: 44px;
+    --main-font-size: 1.28rem;
+    --science-key-height: 28px;
+    --science-font-size: 0.62rem;
+  }
+}
