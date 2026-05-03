@@ -329,6 +329,16 @@ function closeUnmatchedParentheses(tokens) {
   return closed;
 }
 
+function stripTrailingOperators(tokens) {
+  const sanitized = [...tokens];
+
+  while (sanitized.length && (binaryOperators.has(sanitized.at(-1)) || sanitized.at(-1) === "(")) {
+    sanitized.pop();
+  }
+
+  return sanitized;
+}
+
 function getLastOperandRange() {
   if (!state.tokens.length) {
     return null;
@@ -720,7 +730,12 @@ function evaluateExpression() {
   }
 
   try {
-    const closedTokens = closeUnmatchedParentheses(state.tokens);
+    const preparedTokens = stripTrailingOperators(closeUnmatchedParentheses(state.tokens));
+    if (!preparedTokens.length) {
+      return;
+    }
+
+    const closedTokens = closeUnmatchedParentheses(preparedTokens);
     const result = evaluateTokens(closedTokens);
     const expression = closedTokens.map(tokenToText).join(" ");
     const formatted = formatResult(result);
